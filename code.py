@@ -37,13 +37,13 @@ def remove_pattern(input_txt, pattern):
         
     return input_txt
 
-#remove @user from the dataset
+
 combi['tidy_tweet'] = np.vectorize(remove_pattern)(combi['tweet'], "@[\w]*") 
 combi.head()
-#remove special characters,numbers,punctuations
+
 combi['tidy_tweet'] = combi['tidy_tweet'].str.replace("[^a-zA-Z#]", " ")
 combi.head(10)
-#remove all the words having length 3 or less
+
 combi['tidy_tweet'] = combi['tidy_tweet'].apply(lambda x: ' '.join([w for w in x.split() if len(w)>3]))
 combi.head()
 
@@ -221,7 +221,6 @@ for i in range(len(combi)):
 docvec_df = pd.DataFrame(docvec_arrays)
 docvec_df.shape
 
-#logistic regression
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
@@ -292,7 +291,6 @@ prediction_int = prediction[:,1] >= 0.3
 prediction_int = prediction_int.astype(np.int)
 f1_score(yvalid, prediction_int)
 
-#svm
 from sklearn import svm
 svc = svm.SVC(kernel='linear', C=1, probability=True).fit(xtrain_bow, ytrain)
 prediction = svc.predict_proba(xvalid_bow)
@@ -331,7 +329,6 @@ prediction_int = prediction_int.astype(np.int)
 f1_score(yvalid, prediction_int)
 
 
-#randomforest
 from sklearn.ensemble import RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=400, random_state=11).fit(xtrain_bow, ytrain)
 prediction = rf.predict(xvalid_bow)
@@ -351,7 +348,6 @@ rf = RandomForestClassifier(n_estimators=400, random_state=11).fit(xtrain_w2v, y
 prediction = rf.predict(xvalid_w2v)
 f1_score(yvalid, prediction)
 
-#xgboost
 from xgboost import XGBClassifier
 xgb_model = XGBClassifier(max_depth=6, n_estimators=1000).fit(xtrain_bow, ytrain)
 prediction = xgb_model.predict(xvalid_bow)
